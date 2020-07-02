@@ -1,54 +1,121 @@
 <template>
-  <div>
-    <div class="t1 p-9">
-      <h3 class="p-3 text-center">Vue HTTP GET Requests with Fetch</h3>
+  <div class="app">
+    <h1>Functional Component demo</h1>
+    <form @submit.prevent="onSubmit">
+      <label>
+        Component type:
+        <select v-model="component">
+          <option value="FunctionalComponents">Functional</option>
+        </select>
+      </label>
+
+      <br />
+      <br />
+      <button type="submit">Add Items</button>
+    </form>
+
+    <ul>
+      <component
+        :is="component"
+        v-for="item in items"
+        :key="item"
+        :index="item"
+        >{{ item }}</component
+      >
+    </ul>
+    <h1>Dynamic Component demo</h1>
+    <div class="d-flex justify-content-center">
+      <br />
+      <div @click="selectedComponent = 'onec'" class="p-2 m-2 btn btn-primary">
+        One
+      </div>
+      <div @click="selectedComponent = 'twoc'" class="p-2 m-2 btn btn-primary">
+        Two
+      </div>
+      <div
+        @click="selectedComponent = 'threec'"
+        class="p-2 m-2 btn btn-primary"
+      >
+        Three
+      </div>
     </div>
-    <get-request />
-    <get-request-async-await />
-    <get-request-error-handling />
-    <get-request-set-headers />
-    <div class="t2">
-      <h3 class="p-3 text-center">Vue HTTP POST Requests with Fetch</h3>
+    <div class="d-flex justify-content-center">
+      <keep-alive>
+        <component :is="selectedComponent"></component>
+      </keep-alive>
     </div>
-    <post-request />
-    <post-request-async-await />
-    <post-request-error-handling />
-    <post-request-set-headers />
+    <h1>Async Component Demo</h1>
+    <async-component></async-component><br />
+    <egtoggle />
+    <br /><egtags />
   </div>
 </template>
 
 <script>
-import GetRequest from "./components/GetRequest";
-import GetRequestAsyncAwait from "./components/GetRequestAsyncAwait";
-import GetRequestErrorHandling from "./components/GetRequestErrorHandling";
-import GetRequestSetHeaders from "./components/GetRequestSetHeaders";
-import PostRequest from "./components/PostRequest";
-import PostRequestAsyncAwait from "./components/PostRequestAsyncAwait";
-import PostRequestErrorHandling from "./components/PostRequestErrorHandling";
-import PostRequestSetHeaders from "./components/PostRequestSetHeaders";
+import egtoggle from "./components/rlc/egtoggle.vue";
+import egtags from "./components/rlc/egtags.vue";
+import AsyncError from "./components/Asyncc/AsyncError.vue";
+import AsyncLoading from "./components/Asyncc/AsyncLoading.vue";
+import AsyncComponent from "./components/Asyncc/AsyncComponent.vue";
+import onec from "./components/DynamicComponent/onec.vue";
+import twoc from "./components/DynamicComponent/twoc.vue";
+import threec from "./components/DynamicComponent/threec.vue";
+import FunctionalComponents from "./components/FunctionalComponents.vue";
 
 export default {
   name: "app",
   components: {
-    GetRequest,
-    GetRequestAsyncAwait,
-    GetRequestErrorHandling,
-    GetRequestSetHeaders,
-    PostRequest,
-    PostRequestAsyncAwait,
-    PostRequestErrorHandling,
-    PostRequestSetHeaders
+    egtoggle,
+    egtags,
+    FunctionalComponents,
+    onec,
+    twoc,
+    threec,
+    AsyncComponent,
+    AsyncLoading,
+    AsyncError,
+    delay: 100,
+    timeout: 1000
+  },
+  // AsyncComponent: () => ({
+  //   component: AsyncComponent,
+  //   loading: AsyncLoading,
+  //   error: AsyncError,
+  //   delay: 100,
+  //   timeout: 3000
+  // }),
+  data: () => ({
+    component: "FunctionalComponents",
+    items: [],
+    selectedComponent: "onec"
+  }),
+
+  beforeUpdate() {
+    console.time();
+  },
+
+  updated() {
+    console.log("Time for render:");
+    console.timeEnd();
+  },
+
+  methods: {
+    onSubmit() {
+      this.items = Array.from({ length: 5 }, () => {
+        return Math.random();
+      });
+    }
   }
 };
 </script>
 
 <style>
-.t1 {
-  color: silver;
-  background-color: black;
-}
-.t2 {
-  color: grey;
-  background-color: black;
+.app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
