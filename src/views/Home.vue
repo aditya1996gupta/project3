@@ -119,5 +119,5 @@ export default {
 }
 </style> -->
 <template>
-<h1>Demo on restful-api using Vue Chimera</h1>
+ <h1>Demo on restful-api using Vue Chimera</h1>
 </template>
